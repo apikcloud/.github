@@ -3,33 +3,33 @@ name: Build and push
 run-name: Build ${{ github.ref_name }} requested by ${{ github.actor }} 🚀
 
 on:
-  workflow_call:
-    inputs:
-      os_version:
-        description: "Pipeline operating system"
-        required: true
-        type: string
-        default: "ubuntu-latest"
-      image_name:
-        description: "Image name"
-        required: true
-        type: string
-      odoo_version:
-        description: "Odoo Version"
-        required: true
-        type: string
-        default: "odoo_version.txt"
-    secrets:
-      DOCKER_USERNAME:
-        required: true
-      DOCKER_PASSWORD:
-        required: true
-      SUBMODULE_PRIVATE_TOKEN:
-        required: true
-      LIL_DOCKER_USERNAME:
-        required: true
-      LIL_DOCKER_PASSWORD:
-        required: true
+    workflow_call:
+      inputs:
+        image_name:
+          description: "Image name"
+          required: true
+          type: string
+        os_version:
+          description: "Pipeline operating system"
+          required: false
+          type: string
+          default: "ubuntu-latest"
+        odoo_version:
+          description: "Odoo Version"
+          required: false
+          type: string
+          default: "odoo_version.txt"
+      secrets:
+        DOCKER_USERNAME:
+          required: true
+        DOCKER_PASSWORD:
+          required: true
+        SUBMODULE_PRIVATE_TOKEN:
+          required: true
+        LIL_DOCKER_USERNAME:
+          required: true
+        LIL_DOCKER_PASSWORD:
+          required: true
 
 
 jobs:
