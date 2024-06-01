@@ -19,6 +19,10 @@ on:
           required: false
           type: string
           default: "odoo_version.txt"
+        tag:
+          description: "The tag to publish"
+          required: false
+          type: string
       secrets:
         DOCKER_USERNAME:
           required: true
@@ -37,11 +41,27 @@ jobs:
     name: Build and push Docker image to Docker Hub
     runs-on: ${{ inputs.os_version }}
     steps:
-      - name: Check out the repo
+      - name: Check out the repo from branch
         uses: actions/checkout@v4
+        if: inputs.tag == ''
         with:
           submodules: recursive
           token: ${{ secrets.SUBMODULE_PRIVATE_TOKEN }}
+
+      - name: Check out the repo from tag
+        uses: actions/checkout@v4
+        if: inputs.tag
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+          submodules: recursive
+          token: ${{ secrets.SUBMODULE_PRIVATE_TOKEN }}
+          
+      - name: Publish release
+        uses: ghalactic/github-release-from-tag@v5
+        if: github.ref_type == 'tag' || inputs.tag
+        with:
+          token: ${{ secrets.SUBMODULE_PRIVATE_TOKEN }}
+          generateReleaseNotes: "true"          
 
       - name: Prepare repository
         id: prepare-repository
